@@ -1,0 +1,13 @@
+**/.DS_Store
+
+# misc
+**/npm-debug.log
+node_modules
+
+.vscode
+back.tgz
+bok
+
+.env
+
+**/documentation.json

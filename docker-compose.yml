@@ -1,0 +1,48 @@
+version: '2.2'
+services:
+  api:
+    build: ./backend
+    environment:
+      - HOST=host.docker.internal
+      - USER=root
+      - PASSWORD=
+      - DATABASE=todo-db
+      - PORT=3307
+    depends_on:
+      - db
+    networks:
+      - todonet
+    ports:
+      - "127.0.0.1:6001:6001"
+  webapp:
+    build: ./frontend
+    environment:
+      - API_URL=http://host.docker.internal:6001
+    depends_on:
+      - api
+    ports:
+      - "127.0.0.1:6002:6002"
+    networks:
+      - todonet
+  db: 
+    image: mysql:8
+    restart: always
+    environment: 
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+      MYSQL_ROOT_PASSWORD: ''
+      MYSQL_DATABASE: todo-db
+      MYSQL_PASSWORD: ''
+      MYSQL_TCP_PORT: 3307
+    ports: 
+      - '127.0.0.1:3307:3307'
+    expose:
+      - '3307'
+    volumes: 
+      - todo-db:/var/lib/mysql
+    container_name: mysql8
+    networks: 
+      - todonet
+volumes: 
+  todo-db:
+networks: 
+  todonet:
